@@ -40,7 +40,8 @@ Route::middleware('auth')->group(function() {
     Route::delete('/employee/{employee}/delete',[EmployeeController::class, 'destroy'])->name('employee.destroy');
 
     Route::get('/tasks',[TaskController::class, 'index'])->name('tasks');
-    Route::get('/tasks/create',[TaskController::class, 'create'])->name('tasks.create');
+    Route::get('/tasks/{task}',[TaskController::class, 'show'])->name('tasks.show');
+    Route::get('/task/create',[TaskController::class, 'create'])->name('tasks.create');
     Route::post('/tasks/store',[TaskController::class, 'store'])->name('tasks.store');
     Route::get('/tasks/{task}/edit',[TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('/tasks/{task}/update',[TaskController::class, 'update'])->name('tasks.update');

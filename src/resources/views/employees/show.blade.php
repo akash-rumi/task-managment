@@ -29,7 +29,7 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Tasks</span>
-            <a href="#" class="btn btn-sm btn-primary">Add Task</a>
+            <a href="{{ route('tasks.create') }}" class="btn btn-sm btn-primary">Add Task</a>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -37,10 +37,11 @@
                     <thead class="thead-light">
                         <tr>
                             <th style="width: 50px;">#</th>
-                            <th>Title</th>
-                            <th style="width: 140px;">Status</th>
-                            <th style="width: 130px;">Due Date</th>
-                            <th style="width: 160px;">Actions</th>
+                            <th class="col-md-2">Title</th>
+                            <th class="col-md-4">Description</th>
+                            <th class="col-md-2">Status</th>
+                            <th class="col-md-2">Due Date</th>
+                            <th class="col-md-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,8 +49,9 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $task->title }}</td>
+                                <td>{{ \Illuminate\Support\Str::limit($task->description, 50) }}<a href="#">read more</a></td>
                                 <td>
-                                    <span class="{{ $task->status === 'In Progress' ? 'btn btn-outline-primary' : ($task->status === 'Pending' ? 'btn btn-outline-danger' : ($task->status === 'Completed' ? 'btn btn-outline-success' : '')) }}">
+                                    <span class="{{ $task->status === 'In Progress' ? 'btn btn-primary' : ($task->status === 'Pending' ? 'btn btn-danger' : ($task->status === 'Completed' ? 'btn btn-success' : '')) }}">
                                         {{ ucfirst(str_replace('_', ' ', $task->status)) }}
                                     </span>
                                 </td>

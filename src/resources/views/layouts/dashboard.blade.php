@@ -15,7 +15,7 @@
                     <a class="nav-link text-dark" href="{{ route('employees') }}">Employees</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">Tasks</a>
+                    <a class="nav-link text-dark" href="{{ route('tasks') }}">Tasks</a>
                 </li>
             </ul>
         </nav>

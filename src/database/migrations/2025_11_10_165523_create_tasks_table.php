@@ -15,7 +15,7 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained()->onDelete('set null');
             $table->string('title');
             $table->text('description');
             $table->enum('status', ['Pending', 'In Progress', 'Completed'])->default('Pending');
