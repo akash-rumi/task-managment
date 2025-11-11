@@ -27,4 +27,10 @@ class Employee extends Model
     {
         return $this->tasks()->get();
     }
+    
+    // Relationship: employee belongs to a user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

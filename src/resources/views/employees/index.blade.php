@@ -33,7 +33,9 @@
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Employees</span>
-            <a href="{{ route('employee.create') }}" class="btn btn-sm btn-primary">Add Employee</a>
+            @if(Auth::user()->isAdmin())
+                <a href="{{ route('employee.create') }}" class="btn btn-sm btn-primary">Add Employee</a>
+            @endif
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -42,10 +44,12 @@
                         <tr>
                             <th style="width: 50px;">#</th>
                             <th class="col-md-4">Name</th>
-                            <th class="col-md-3">Email</th>
+                            <th class="col-md-{{ Auth::user()->isAdmin() ? '3' : '4' }}">Email</th>
                             <th class="col-md-2">Designation</th>
-                            <th class="col-md-1">Tasks</th>
-                            <th class="col-md-2">Actions</th>
+                            <th class="col-md-{{ Auth::user()->isAdmin() ? '1' : '2' }}">Tasks</th>
+                            @if(Auth::user()->isAdmin())
+                                <th class="col-md-2">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -58,14 +62,16 @@
                                 <td>{{ $employee->email }}</td>
                                 <td>{{ $employee->designation }}</td>
                                 <td>{{ $employee->tasks->count() }}</td>
-                                <td>
-                                    <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <form action="{{ route('employee.destroy', $employee->id) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</button>
-                                    </form>
-                                </td>
+                                @if(Auth::user()->isAdmin())
+                                    <td>
+                                        <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <form action="{{ route('employee.destroy', $employee->id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</button>
+                                        </form>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>

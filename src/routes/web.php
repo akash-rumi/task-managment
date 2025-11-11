@@ -33,14 +33,18 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/employees',[EmployeeController::class, 'index'])->name('employees');
     Route::get('/employee/{employee}',[EmployeeController::class, 'show'])->name('employee.show');
+    
+    Route::get('/tasks',[TaskController::class, 'index'])->name('tasks');
+    Route::get('/tasks/{task}',[TaskController::class, 'show'])->name('tasks.show');
+});
+
+Route::middleware('auth','admin')->group(function() {
     Route::get('/employe/create',[EmployeeController::class, 'create'])->name('employee.create');
     Route::post('/employee/store',[EmployeeController::class, 'store'])->name('employee.store');
     Route::get('/employee/{employee}/edit',[EmployeeController::class, 'edit'])->name('employee.edit');
     Route::put('/employee/{employee}/update',[EmployeeController::class, 'update'])->name('employee.update');
     Route::delete('/employee/{employee}/delete',[EmployeeController::class, 'destroy'])->name('employee.destroy');
 
-    Route::get('/tasks',[TaskController::class, 'index'])->name('tasks');
-    Route::get('/tasks/{task}',[TaskController::class, 'show'])->name('tasks.show');
     Route::get('/task/create',[TaskController::class, 'create'])->name('tasks.create');
     Route::post('/tasks/store',[TaskController::class, 'store'])->name('tasks.store');
     Route::get('/tasks/{task}/edit',[TaskController::class, 'edit'])->name('tasks.edit');

@@ -10,12 +10,14 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Task Details</span>
                         <div>
-                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this Task?')">Delete</button>
-                            </form>
+                            @if(Auth::user()->isAdmin())
+                                <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this Task?')">Delete</button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">

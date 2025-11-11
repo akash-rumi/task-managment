@@ -48,7 +48,9 @@
     <div class="card mb-4 mx-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Tasks</span>
-            <a href="{{ route('tasks.create') }}" class="btn btn-sm btn-primary">Add Task</a>
+            @if(Auth::user()->isAdmin())
+                <a href="{{ route('tasks.create') }}" class="btn btn-sm btn-primary">Add Task</a>
+            @endif
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -56,12 +58,14 @@
                     <thead class="thead-light">
                         <tr>
                             <th style="width: 50px;">#</th>
-                            <th class="col-md-2">Title</th>
-                            <th class="col-md-3">Description</th>
+                            <th class="col-md-{{ Auth::user()->isAdmin() ? '2' : '3' }}">Title</th>
+                            <th class="col-md-{{ Auth::user()->isAdmin() ? '3' : '4' }}">Description</th>
                             <th class="col-md-2">Assignee</th>
                             <th class="col-md-2">Status</th>
                             <th class="col-md-1">Due Date</th>
-                            <th class="col-md-2">Actions</th>
+                            @if(Auth::user()->isAdmin())
+                                <th class="col-md-2">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -83,14 +87,16 @@
                                     </span>
                                 </td>
                                 <td>{{ $task->due_date}}</td>
-                                <td>
-                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this Task?')">Delete</button>
-                                    </form>
-                                </td>
+                                @if(Auth::user()->isAdmin())
+                                    <td>
+                                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this Task?')">Delete</button>
+                                        </form>
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
