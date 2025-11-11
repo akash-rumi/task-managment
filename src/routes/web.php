@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TaskController;
 
@@ -30,6 +31,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function() {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/{user}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/{user}/update', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('/employees',[EmployeeController::class, 'index'])->name('employees');
     Route::get('/employee/{employee}',[EmployeeController::class, 'show'])->name('employee.show');
