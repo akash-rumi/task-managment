@@ -22,4 +22,9 @@ class Employee extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function getTasks()
+    {
+        return $this->tasks()->get();
+    }
 }

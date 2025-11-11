@@ -31,14 +31,15 @@ Route::middleware('auth')->group(function() {
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/employees',[EmployeeController::class, 'index'])->name('employees.index');
-    Route::get('/employees/create',[EmployeeController::class, 'create'])->name('employees.create');
-    Route::post('/employees/store',[EmployeeController::class, 'store'])->name('employees.store');
-    Route::get('/employees/{employee}/edit',[EmployeeController::class, 'edit'])->name('employees.edit');
-    Route::put('/employees/{employee}/update',[EmployeeController::class, 'update'])->name('employees.update');
-    Route::delete('/employees/{employee}/delete',[EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::get('/employees',[EmployeeController::class, 'index'])->name('employees');
+    Route::get('/employee/{employee}',[EmployeeController::class, 'show'])->name('employee.show');
+    Route::get('/employe/create',[EmployeeController::class, 'create'])->name('employee.create');
+    Route::post('/employee/store',[EmployeeController::class, 'store'])->name('employee.store');
+    Route::get('/employee/{employee}/edit',[EmployeeController::class, 'edit'])->name('employee.edit');
+    Route::put('/employee/{employee}/update',[EmployeeController::class, 'update'])->name('employee.update');
+    Route::delete('/employee/{employee}/delete',[EmployeeController::class, 'destroy'])->name('employee.destroy');
 
-    Route::get('/tasks',[TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/tasks',[TaskController::class, 'index'])->name('tasks');
     Route::get('/tasks/create',[TaskController::class, 'create'])->name('tasks.create');
     Route::post('/tasks/store',[TaskController::class, 'store'])->name('tasks.store');
     Route::get('/tasks/{task}/edit',[TaskController::class, 'edit'])->name('tasks.edit');
