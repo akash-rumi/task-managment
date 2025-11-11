@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\MOdels\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -50,6 +52,9 @@ class EmployeeController extends Controller
             'string' => 'The :attribute must be a string.',
             'max' => 'The :attribute must not be greater than :max characters.',
             'unique' => 'The :attribute has already been taken.',
+            'min' => 'The :attribute must be at least :min characters.',
+            'email' => 'The :attribute must be a valid email address.',
+            'regex' => 'The :attribute must match the specified pattern.',
         ];
 
         $request->validate([
@@ -57,16 +62,35 @@ class EmployeeController extends Controller
             'email' => 'required|string|email|max:255|unique:employees',
             'phone' => 'required|string|regex:/^01[3-9]{1}[0-9]{8}$/|unique:employees',
             'designation' => 'required|string|max:255',
+            'password' => 'required|string|min:8',
         ],$messages);
 
-        Employee::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
-            'designation' => $request->designation,
+            'password' => Hash::make($request->password),
+            'role' => 0, // Normal user by default
         ]);
 
-        return redirect()->route('employees')->with('success', 'Employee added successfully!');
+        if($user)
+        {
+            // Create employee linked to the user
+            $employee = Employee::create([
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'designation' => $request->designation,
+            ]);
+        }
+
+        if($employee && $user)
+        {
+            return redirect()->route('employees')->with('success', 'Employee added successfully!');
+        } else
+        {
+            return redirect()->route('employees')->with('error', 'Failed to add employee.');
+        }
     }
 
     /**
@@ -100,12 +124,15 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Employee $employee)
-    {
+    {   
         $messages = [
             'required' => 'The :attribute field is required.',
             'string' => 'The :attribute must be a string.',
             'max' => 'The :attribute must not be greater than :max characters.',
             'unique' => 'The :attribute has already been taken.',
+            'min' => 'The :attribute must be at least :min characters.',
+            'email' => 'The :attribute must be a valid email address.',
+            'regex' => 'The :attribute must match the specified pattern.',
         ];
 
         $request->validate([
@@ -113,16 +140,29 @@ class EmployeeController extends Controller
             'email' => 'required|string|email|max:255|unique:employees,email,' . $employee->id,
             'phone' => 'required|string|regex:/^01[3-9]{1}[0-9]{8}$/|unique:employees,phone,' . $employee->id,
             'designation' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8',
         ],$messages);
 
-        $employee->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'designation' => $request->designation,
-        ]);
+        $user = $employee->user;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->has('is_admin') ? 1 : 0;
+        
+        // Only update password if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        
+        $user->save();
 
-        if ($employee) {
+        // Update the employee
+        $employee->name = $request->name;
+        $employee->email = $request->email;
+        $employee->phone = $request->phone;
+        $employee->designation = $request->designation;
+        $employee->save();
+
+        if ($employee && $user) {
             return redirect()->route('employees')->with('success', 'Employee updated successfully!');
         } else {
             return redirect()->route('employees')->with('error', 'Failed to update employee.');

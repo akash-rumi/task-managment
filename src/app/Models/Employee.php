@@ -15,6 +15,7 @@ class Employee extends Model
         'email',
         'phone',
         'designation',
+        'user_id',
     ];
 
     // Relationship: employee has many tasks
