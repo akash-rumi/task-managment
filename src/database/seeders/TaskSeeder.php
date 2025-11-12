@@ -14,7 +14,7 @@ class TaskSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             Task::create([
             'employee_id' => $faker->numberBetween(1, 5),
             'status' => $faker->randomElement(['Pending', 'In Progress', 'Completed']),

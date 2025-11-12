@@ -24,6 +24,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    Task Status 
+                </div>
+                <div class="card-body">
+                    <canvas id="employeeTaskStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card mb-4">
@@ -83,3 +93,50 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Pie Chart: Task Status Distribution
+        const ctxPie = document.getElementById('employeeTaskStatusChart').getContext('2d');
+        const taskStatusChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Pending', 'In Progress', 'Completed'],
+                datasets: [{
+                    label: 'Task',
+                    data: [{{ $pendingTasks }}, {{ $inProgressTasks }}, {{ $completedTasks }}],
+                    backgroundColor: ['#fbbf24', '#60a5fa', '#34d399'],
+                    borderColor: ['#f59e0b', '#3b82f6', '#10b981'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Total Tasks: ' +  {{$totalTasks}},
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const percentage = ((value /  {{$totalTasks}}) * 100).toFixed(1);
+                                return label + ': ' + value + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>

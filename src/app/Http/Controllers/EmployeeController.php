@@ -102,7 +102,12 @@ class EmployeeController extends Controller
     public function show(Employee $employee)
     {   
         $tasks = $employee->getTasks();
-        return view('employees.show', compact('employee','tasks'));
+        $totalTasks = $tasks->count();
+        $completedTasks = $employee->tasks()->where('status', 'Completed')->count();
+        $pendingTasks = $employee->tasks()->where('status', 'Pending')->count();
+        $inProgressTasks = $employee->tasks()->where('status', 'In Progress')->count();
+
+        return view('employees.show', compact('employee','tasks','completedTasks','pendingTasks','inProgressTasks','totalTasks'));
     }
 
     /**
